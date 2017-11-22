@@ -7,15 +7,41 @@ import {
     Text,
     TouchableOpacity,
     View,
+    Dimensions
 } from 'react-native';
-import { Video } from 'expo';
+import { Video, ScreenOrientation } from 'expo';
+import VideoPlayer from '@expo/videoplayer';
 
 export default class EnterData extends React.Component {
+    componentDidMount() {
+        ScreenOrientation.allow(ScreenOrientation.Orientation.ALL);
+        Dimensions.addEventListener(
+            'change',
+            this.orientationChangeHandler.bind(this)
+        );
+    }
+
+    orientationChangeHandler(dims) {
+        const { width, height } = dims.window;
+        const isLandscape = width > height;
+        this.setState({ isPortrait: !isLandscape });
+        ScreenOrientation.allow(ScreenOrientation.Orientation.ALL);
+    }
 
     render() {
-        // const path = this.props.navigation.state.params.uri;
         const currentVideo = this.props.navigation.state.params && this.props.navigation.state.params.uri ? 
-            <Video source={{ uri: this.props.navigation.state.params.uri}} style={{ width: 250, height: 250 }}/>
+            <VideoPlayer
+                videoProps={{
+                    shouldPlay: true,
+                    resizeMode: Video.RESIZE_MODE_CONTAIN,
+                    source: {
+                        uri: this.props.navigation.state.params.uri,
+                    },
+                }}
+                isPortrait={true}
+                playFromPositionMillis={0}
+                showControlsOnLoad={true}
+            />
                 : <Text>'Hello World'</Text>;
         
         return (
