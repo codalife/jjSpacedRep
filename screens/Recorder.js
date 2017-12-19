@@ -24,12 +24,6 @@ export default class Recorder extends React.Component {
     } else if (hasCameraPermission === false) {
       return <Text>No access to camera</Text>;
     } else {
-      let video;
-      if (this.state.videoUri) {
-        video = <Video source={{ uri: this.state.videoUri }} style={{ width: 250, height: 250 }} />
-      } else {
-        video = <Text>Nothing yet</Text>;
-      }
 
       return (
         <View style={{ flex: 1 }}>
